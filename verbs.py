@@ -1,7 +1,4 @@
-import numpy as np
-
-
-VERBS_INCREASE = np.array((
+VERBS_INCREASE = set((
     'increase', 'advance', 'boost', 'broaden', 'build', 'build up', 'deepen',
     'develop', 'double', 'enhance', 'enlarge', 'escalate', 'expand', 'extend',
     'further', 'heighten', 'intensify', 'multiply', 'raise', 'reinforce',
@@ -12,7 +9,7 @@ VERBS_INCREASE = np.array((
     'snowball', 'spread', 'supplement', 'swarm', 'teem', 'thicken', 'wax',
     'mark up', 'slap on', 'tack on'
 ))
-VERBS_DECREASE = np.array((
+VERBS_DECREASE = set((
     'abate', 'curb', 'curtail', 'cut down', 'decline', 'depreciate',
     'deteriorate', 'diminish', 'drop', 'drop off', 'dwindle', 'ease', 'ebb',
     'fall off', 'lessen', 'lower', 'reduce', 'shrink', 'sink', 'slacken',
@@ -23,4 +20,3 @@ VERBS_DECREASE = np.array((
     'let up', 'lose edge', 'narrow down', 'peter out', 'run low', 'slack off',
     'slow down', 'tail off', 'wear away'
 ))
-    
