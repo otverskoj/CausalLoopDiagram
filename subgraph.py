@@ -2,19 +2,7 @@ from matplotlib import pyplot as plt
 import networkx as nx
 
 from verbs import VERBS_INCREASE
-
-
-# change to import
-FAKE_DATA = [
-    {
-        'data': {'object': 'million', 'predicate': 'be', 'subject': 'income'},
-        'sentence': 'Net income was $9.4 million compared to the prior year of $2.7 million.'
-    },
-    {
-        'data': {'object': 'dollars', 'predicate': 'exceed', 'subject': 'Revenue'},
-        'sentence': 'Revenue exceeded twelve billion dollars, with a loss of $1b.'
-    }
-]
+from dependency_parser import parse_dependencies
 
 
 def draw_digraph_with_edge_labels(digraph, pos=None):
@@ -39,5 +27,6 @@ def get_verb_weight(verb: str) -> int:
     return 1 if verb in VERBS_INCREASE else -1
 
 
-directed_graph = nx.DiGraph(convert_to_edgelist(FAKE_DATA))
+graph_data = parse_dependencies("Inflation increases costs. Inflation reduces wages.")
+directed_graph = nx.DiGraph(convert_to_edgelist(graph_data))
 draw_digraph_with_edge_labels(directed_graph)
