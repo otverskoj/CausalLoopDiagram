@@ -1,4 +1,3 @@
-import pprint
 import spacy
 
 from verbs import VERBS_DECREASE, VERBS_INCREASE
@@ -31,5 +30,3 @@ def parse_dependencies(text: str) -> list[dict]:
         )
     
     return graph_data
-
-pprint.pprint(parse_dependencies("Inflation increases costs. Inflation reduces wages."))
