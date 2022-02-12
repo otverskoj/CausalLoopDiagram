@@ -1,13 +1,15 @@
 import networkx as nx
 
 from merge_rule import MergeRule
+from similarity import is_similar
 
 
 def merge_graphs(graphs: list[nx.DiGraph], 
                  rule: MergeRule = MergeRule.LEVENSHTEIN) -> nx.DiGraph:
-    for i in range(len(graphs) - 1):
-        graph = _merge_helper(graphs[i], graphs[i + 1], rule)
-    return graph
+    result_graph = graphs[0]
+    for graph in graphs[1:]:
+        result_graph = _merge_helper(result_graph, graph)
+    return result_graph
 
 
 def _merge_helper(graph1: nx.DiGraph, graph2: nx.DiGraph, 
@@ -24,11 +26,6 @@ def _merge_helper(graph1: nx.DiGraph, graph2: nx.DiGraph,
                     for node, weight in end_nodes_with_weights
                 ])
     return nx.DiGraph(result_edgelist)
-
-
-# TODO: Implement similarity calculating for two graph nodes by specific rule 
-def is_similar(first_node: str, second_node: str, rule: MergeRule) -> bool:
-    return True
 
 
 def find_end_nodes_with_weights(node: str, edgelist: list[tuple[str, str, int]]) -> list[str]:
