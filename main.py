@@ -1,6 +1,7 @@
-from dependency_parser import parse_dependencies
-from subgraph import make_subgraph_list
+import networkx as nx
+from causal_loop_diagram import make_diagram, draw_diagram
 
 
-graphs = make_subgraph_list(parse_dependencies("Inflation increases costs. Inflation reduces wages."))
-print(graphs[0].nodes)
+text: str = "Inflation increases costs. Inflation reduces wages."
+diagram: nx.DiGraph = make_diagram(text)
+draw_diagram(diagram)

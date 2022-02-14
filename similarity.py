@@ -15,7 +15,7 @@ def _is_similar_by_cosine(first_node: str, second_node: str) -> bool:
     return False
 
 
-handlers = {
+handlers: dict = {
     MergeRule.SEQUENCE_MATHCER: _is_similar_by_sequence_matcher,
     MergeRule.LEVENSHTEIN: _is_similar_by_levenshtein,
     MergeRule.COSINE: _is_similar_by_cosine
