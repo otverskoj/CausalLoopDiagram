@@ -1,3 +1,4 @@
+from math import degrees
 import networkx as nx
 
 from merge_rule import MergeRule
@@ -5,30 +6,24 @@ from similarity import is_similar
 
 
 def merge_graphs(graphs: list[nx.DiGraph], 
-                 rule: MergeRule = MergeRule.LEVENSHTEIN) -> nx.DiGraph:
+                 rule: MergeRule = MergeRule.SEQUENCE_MATHCER) -> nx.DiGraph:
     result_graph = graphs[0]
     for graph in graphs[1:]:
-        result_graph = _merge_helper(result_graph, graph)
+        result_graph = _merge_helper(result_graph, graph, rule)
     return result_graph
 
 
-def _merge_helper(graph1: nx.DiGraph, graph2: nx.DiGraph, 
-                  rule: MergeRule = MergeRule.LEVENSHTEIN) -> nx.DiGraph:
-    graph2_edgelist = nx.convert.to_edgelist(graph2)
-    
+def _merge_helper(first_graph: nx.DiGraph, second_graph: nx.DiGraph, 
+                  rule: MergeRule) -> nx.DiGraph:
     result_edgelist = []
-    for start_node in graph1.nodes:
-        for end_node in graph2.nodes:
+    start_nodes = [node for node, degree in first_graph.out_degree() if degree > 0]
+    end_nodes = [node for node, degree in first_graph.out_degree() if degree > 0]
+    for start_node in start_nodes:
+        for end_node in end_nodes:
             if is_similar(start_node, end_node, rule):
-                end_nodes_with_weights = find_end_nodes_with_weights(end_node, graph2_edgelist)
                 result_edgelist.extend([
-                    (start_node, node, weight) 
-                    for node, weight in end_nodes_with_weights
+                    (start_node, node, {'weight': weight}) 
+                    for _, node, weight in second_graph.out_edges(end_node, data='weight')
                 ])
-    return nx.DiGraph(result_edgelist)
-
-
-def find_end_nodes_with_weights(node: str, edgelist: list[tuple[str, str, int]]) -> list[str]:
-    return [
-        (edge[1], edge[2]) for edge in edgelist if edge[0] == node
-    ]
+    first_graph.add_edges_from(result_edgelist)
+    return first_graph
