@@ -1,3 +1,4 @@
+import pickle
 from typing import Optional
 
 from matplotlib import pyplot as plt
@@ -32,3 +33,20 @@ def _get_edge_labels(digraph: nx.DiGraph) -> dict:
     return {
         (v1, v2): '+' if w['weight'] == 1 else '-' for v1, v2, w in nx.convert.to_edgelist(digraph)
     }
+
+
+def to_python_dict(digraph: nx.DiGraph) -> dict:
+    return nx.to_dict_of_dicts(digraph)
+
+
+def serialize(digraph: nx.DiGraph, filepath: str) -> None:
+    filepath = filepath if '.pickle' in filepath else filepath + '.pickle'
+    with open(filepath, 'wb') as out_file:
+        pickle.dump(to_python_dict(digraph), out_file)
+
+
+def deserialize(filepath: str) -> nx.DiGraph:
+    filepath = filepath if '.pickle' in filepath else filepath + '.pickle'
+    with open(filepath, 'rb') as in_file:
+        dod = pickle.load(in_file)
+    return nx.from_dict_of_dicts(dod)
